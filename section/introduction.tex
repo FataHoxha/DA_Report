@@ -1,0 +1,29 @@
+Raft is a consensus algorithm for managing a replicated log
+proposed by Ontaro and Ousterhout~\cite{ongaro2014search}.
+It is powerful as the state of the art (multi-)Paxos~\cite{lamport1998part} and
+aims at replacing it thanks to its understandability.
+Consensus algorithm tend to be complex due to the problem they try to solve,
+it is not worthless saying that leaving space for interpretation, like Lamport
+did when proposed Paxos via a tale~\cite{lamport1998part}, does not help.
+The combination of Paxos' complexity and the way it was presented required
+indeed Lamport to release an alternative description~\cite{lamport2001paxos}.
+Even if the author claims that ``The Paxos algorithm, when presented in plain
+English, is very simple.'' it seams that the level of abstraction
+with which Paxos was designed and its complex architecture which does not map
+to the real world applications complicate its implementations, which sometimes
+require to relax the model leading to unproved protocols~\cite{chandra2007paxos}.
+The same argument holds for the students and researches.\\
+Ongaro, thus, identified in the \emph{understandability} its ``most important goal''~\cite{ongaro2014consensus}.
+
+What is the simplest way to present an try to understand and interaction based
+protocol?\emph{Visualizing it!}
+
+Ongaro uses and provides a Raft simulator, Raft Scope~\cite{raftscope}, to introduce the protocol.
+Such tool is very useful for easy scenarios simulation and slides creation,
+unfortunately it does not implement all the features of the protocol and lacks
+some graphics functionalities which can be key in the presentation of
+many corner cases.
+
+In our project we aim at complete the protocol implementation, integrate the new
+functionalities with the existing one and improve the graphics where needed to
+enhance transparency and thus enable even more understanding.
