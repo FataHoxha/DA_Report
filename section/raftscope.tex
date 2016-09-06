@@ -1,16 +1,15 @@
-Raft Scope is a visualized developed by the very same protocol author
-Diego Ontaro%(@ongardie).
-It provides raft basic functionalities simulation, fast forward and run playback;
-more precisely it support:
-\begin{itemize}
-    \item[] \textbf{Protocol}
-        \item Leader election
-        \item Log replication
-    \item[] \textbf{Interaction}
-        \item Client request
-        \item Server status (start, stop, restart)
-        \item Simulation speed
-\end{itemize}
+Raft Scope is a visualized (Figure~\ref{fig:original}) developed by the very same protocol author
+Diego Ontaro (@ongardie).
+It provides raft basic functionalities simulation, fast forward and run playback.
+
+\subsection{Protocol}
+The tools simulates the \emph{leader election} and the \emph{log replication}
+protocols as described in Ongaro's Ph.D. thesis~\cite{ongaro2014consensus} Chapter 3,
+except for Section 3.10 which is not implemented.
+
+\subsection{Interaction}
+The user can send \emph{Client request}, start/stop/restart a server,
+manage the simulation speed and finally \emph{time travel} (play/rewind/rollback/playback).
 
 \begin{figure}[h]
     \centering
@@ -18,14 +17,14 @@ more precisely it support:
     \caption{Original}\label{fig:original}
 \end{figure}
 
-\subsection{Internals}
+\subsection{Internals}\label{sec:internals}
 It is worth nothing that JavaScript it self, language of the simulator,
-is single threaded, Ontaro implemented a sort of virtual machine(VM) where the
+is single threaded, Ontaro implemented a sort of virtual machine (VM) where the
 concurrency is only simulated playing with the concept of time: each action
 (\textit{e.g.} receiveMessage) is set to be taken effect at a specific point
 in time.
 The simulation take place in a main loop (\texttt{raft.update}) where each
-server is give the opportunity to make an action(\emph{e.g.} start a new election);
+server is give the opportunity to make an action (\emph{e.g.} start a new election);
 the available action are checked in defined order.
 The VM has an internal clock, that at each simulation cycle is
 advanced by an amount of time computed \textit{w.r.t} the actual simulation speed.
