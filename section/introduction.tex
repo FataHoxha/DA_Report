@@ -1,17 +1,17 @@
 Raft is a consensus algorithm for managing a replicated log
-proposed by Ontaro and Ousterhout~\cite{ongaro2014search}.
-It is powerful as the state of the art (multi-)Paxos~\cite{lamport1998part} and
+proposed by Diego Ongaro and John Ousterhout~\cite{ongaro2014search}.
+It is equivalent to the state of the art (multi-)Paxos~\cite{lamport1998part} in fault-tolerance and performance and
 aims at replacing it thanks to its understandability.
-Consensus algorithm tend to be complex due to the problem they try to solve,
-it is not worthless saying that leaving space for interpretation, like Lamport
-did when proposed Paxos via a tale~\cite{lamport1998part}, does not help.
+Consensus algorithms tend to be complex due to the problem they try to solve,
+and leaving space for interpretation, like Lamport
+did when proposing Paxos via a tale~\cite{lamport1998part}, does not help.
 The combination of Paxos' complexity and the way it was presented required
-indeed Lamport to release an alternative description~\cite{lamport2001paxos}.
+Lamport to release an alternative description~\cite{lamport2001paxos}.
 Even if the author claims that ``The Paxos algorithm, when presented in plain
-English, is very simple.'' it seams that the level of abstraction
-with which Paxos was designed and its complex architecture which does not map
-to the real world applications complicate its implementations, which sometimes
-require to relax the model leading to unproved protocols~\cite{chandra2007paxos}.
+English, is very simple.'' it seems that the level of abstraction
+with which Paxos was designed and its complex architecture do not map
+to real world applications and complicate its implementations, which are sometimes
+required to relax the model leading to unproved protocols~\cite{chandra2007paxos}.
 The same argument holds for the students and researches.\\
 Ongaro, thus, identified in the \emph{understandability} its ``most important goal''~\cite{ongaro2014consensus}.
 
