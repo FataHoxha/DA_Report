@@ -8,7 +8,7 @@ The combination of Paxos' complexity and the way it was presented required
 Lamport to release an alternative description~\cite{lamport2001paxos}.
 This complexity makes Paxos hard to implement in real world applications, which are sometimes
 required to relax the model described leading to unproved protocols~\cite{chandra2007paxos}.
-The same reason makes it difficult to learn and study for the students and researchers.\\
+The same reason makes it difficult to learn and study for students and researchers.\\
 
 Ongaro thus identified in \emph{understandability} its ``most important goal''~\cite{ongaro2014consensus}
 while describing Raft, breaking it into smaller independant subproblems and cleanly addressing all pieces needed
@@ -17,12 +17,12 @@ The simplest way to present and understand an interaction based
 protocol is visualizing it.
 
 Raft Scope~\cite{raftscope} is a simulator that runs in a browser (Figure~\ref{fig:original}) developed by the very same
-author Diego Ongaro.
+author Diego Ongaro (@ongardie on GitHub).
 It simulates the \emph{leader election} and the \emph{log replication}
 protocols as described in his original Ph.D. thesis~\cite{ongaro2014consensus}.
 This tool is very useful to simulate easy scenarios,
 however it does not currently implement all the features of the protocol and lacks
-some graphics cues which can be key in the presentation of many corner cases.
+some graphical cues which can be key in the presentation of many corner cases.
 
 In our project we aim to add more features to the protocol implementation and improve the user interface where needed.
 In particular, we plan to add functionality to handle cluster membership changes and channel noise.

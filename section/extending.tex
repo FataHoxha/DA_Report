@@ -1,10 +1,10 @@
-We extended the visulaizer to fully comply with Raft protocol
-implementing missing functionalities, like cluster memberships changes.
+We extended the visualizer to comply more precisely with the Raft specification
+by implementing missing functionalities, like cluster memberships changes.
 We also improved the interface (Figure~\ref{fig:final}) and cleaned up the codebase.
 
 \subsection{Simulation model}
 Fixing the problem in Section~\ref{sec:simulation} is not straight forward: swapping the two checks would
-break other scenarios (\texttt{e.g.} a leader message is due just after the \texttt{ElectionTimeout}).
+break other scenarios (\emph{e.g.} a leader message is due just after the \texttt{ElectionTimeout}).
 The only definitive fix would have been rewriting the entire simulation system.
 Given the use case and applications of Raft Scope we decided to limit the maximum speed to prevent such problems.
 
@@ -14,9 +14,9 @@ set by the user.
 \subsection{Interaction}
 \emph{Cluster membership changes} are an important part of a consensus protocol.
 Raft initially handled this with a procedure called \emph{joint consensus}
-but Ongaro expanded on this matter, in the Chapter 4 of his Ph.D. thesis~\cite{ongaro2014consensus},
-with a new simpler algorithm that only allows single server changes at a time (both removal and addition).
-However any arbitrary change that could be expressed with joint consensus
+but Ongaro expanded on this matter, in the fourth chapter of his Ph.D. thesis~\cite{ongaro2014consensus},
+with a simpler algorithm that only allows single server changes at a time (both removal and addition).
+Any arbitrary change that could be expressed with joint consensus
 can be also managed with a series of single server changes that is easier to visualize.
 Each configuration in the series must be committed before the next one can take place.
 With the intention to clarify this series of changes, we added a \emph{cluster configuration changes queue}.
@@ -47,14 +47,14 @@ We added two more scripts: \texttt{render.js} and \texttt{presenter.js}.
 
 The first handles all the graphic related tasks, in particular SVG generation,
 servers realignment, sliders and log table updates.
-It also contains the code that generates modal and context menu when
+It also contains the code that generates modal and context menus when
 the user clicks on a message or a server.
 
 The \texttt{presenter.js} file contains utilities to save and load simulation scenarios (state).
-Further it provide hot keys to quickly interact with the system, offering the
+Furthermore it provides hot keys to quickly interact with the system and
 functions that help simulate interesting situations such as split votes.\\
 
-Thanks to our refactoring the \texttt{script.js} now only contains the
+Thanks to our refactoring \texttt{script.js} now only contains the
 initialization code and the \emph{system clock} loop.
 
 

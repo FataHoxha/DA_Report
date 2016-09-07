@@ -1,5 +1,3 @@
-Raft Scope is a visualized (Figure~\ref{fig:original}) developed by the very same protocol author
-Diego Ontaro (@ongardie on GitHub).
 Raft Scope simulates a small Raft cluster in the browser via JavaScript.
 The user can pause the simulation, modify its speed and seek points in time.
 
@@ -43,14 +41,14 @@ The user can save snapshots of a particular simulation and all of its checkpoint
 The Raft Scope code base is organized mainly in three different files:
 \texttt{state.js}, \texttt{raft.js} and \texttt{script.js}.
 
-The first one keep track and manages the state of the simulation,
-of the configuration and of entities (\emph{e.g.} servers, messages, logs).
+The first one keeps track and manages the state of the simulation,
+of the configuration and of its entities (\emph{e.g.} servers, messages, logs).
 For each simulation cycle, the previous state is appended to a list of checkpoints
 and a new one is generated. This allows the user to rewind and playback
 the simulation by jumping to a previous state.
-The \texttt{raft.js} script holds the rules of the simulation.
+The \texttt{raft.js} script holds the rules of the simulation and initial configuration for the cluster.
 Rules are actions defined by the protocol, such as \textit{BecomeLeader},
 \textit{StartNewElection} and \textit{SendRPC}.
 These two files are the core of the simulation and they are at the base of the main loop.
-Everything else is handled by \texttt{script.js}; starting connecting entities
+Everything else is handled by \texttt{script.js}: managing the interface and connecting entities
 to their graphical representation, generating the log table and initializing the simulation.
