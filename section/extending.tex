@@ -1,6 +1,10 @@
+We extended the visulaizer to fully comply with Raft protocol
+implementing missing functionalities, like cluster memberships changes.
+We also improved the interface (Figure~\ref{fig:final}) and cleaned up the codebase.
+
 \subsection{Simulation model}
-Fixing the problem in section 2.1 is not straight forward: swapping the two checks would
-break other scenarios (\texttt{e.g.} M1 is due just after the \texttt{ElectionTimeout}).
+Fixing the problem in Section~\ref{sec:simulation} is not straight forward: swapping the two checks would
+break other scenarios (\texttt{e.g.} a leader message is due just after the \texttt{ElectionTimeout}).
 The only definitive fix would have been rewriting the entire simulation system.
 Given the use case and applications of Raft Scope we decided to limit the maximum speed to prevent such problems.
 
@@ -8,10 +12,12 @@ Network noise was integrated into the simulation and the state object, dropping 
 set by the user.
 
 \subsection{Interaction}
-\emph{Cluster membership changes} are an important part of a consensus protocol. Raft initially handled this with a procedure
-called \emph{joint consensus} but Ongaro expanded on this matter in his Ph.D. thesis~\cite{ongaro2014consensus}(Chapter 4) with a new
-simpler algorithm that only allows single server changes at a time (both removal and addition), however any arbitrary
-change that could be expressed with joint consensus can be also managed with a series of single server changes that is easier to visualize.
+\emph{Cluster membership changes} are an important part of a consensus protocol.
+Raft initially handled this with a procedure called \emph{joint consensus}
+but Ongaro expanded on this matter, in the Chapter 4 of his Ph.D. thesis~\cite{ongaro2014consensus},
+with a new simpler algorithm that only allows single server changes at a time (both removal and addition).
+However any arbitrary change that could be expressed with joint consensus
+can be also managed with a series of single server changes that is easier to visualize.
 Each configuration in the series must be committed before the next one can take place.
 With the intention to clarify this series of changes, we added a \emph{cluster configuration changes queue}.
 This queue keeps track of all the cluster reconfigurations submitted by the user while they are being processed.
@@ -21,8 +27,10 @@ A bug in the single server membership change algorithm was later found and discu
 could rewrite committed history. The bug occurred whenever leadership was lost and two pending configurations were happening
 at the same time, submitted by different leaders. As described there, we implemented the fix by having leaders append a \texttt{NOOP} to their log.
 
-We implemented a safety check for disruptive(removed) servers as described in section 4.2.3 of the author's thesis.
-Servers, when removed, could disrupt cluster functionality by starting new elections whenever a pending change for their removal
+We implemented a safety check for disruptive (removed) servers as described
+in Section~4.2.3 of the author's thesis.
+Servers, when removed, could disrupt cluster functionality by starting new
+elections whenever a pending change for their removal
 is being processed. The fix makes servers ignore VoteRequest RPCs if they have received an heartbeat within
 \texttt{MIN\_ELECTION\_TIMEOUT} from an active leader.
 
@@ -35,21 +43,24 @@ other servers, which have not yet received the entry, might still interact with 
 We decided to remove it when every other server has removed it from its \texttt{peers} list.
 
 \subsection{Code reorganization}
-We added the following files:
-\begin{itemize}
-\item \texttt{render.js}
-\item \texttt{presenter.js}
-\end{itemize}
+We added two more scripts: \texttt{render.js} and \texttt{presenter.js}.
 
-\texttt{render.js} handles all the graphic, in particular SVG generation, servers realignment, sliders and generating the new log table. It also contains the code that generates modal and context menu when clicking messages or servers.
+The first handles all the graphic related tasks, in particular SVG generation,
+servers realignment, sliders and log table updates.
+It also contains the code that generates modal and context menu when
+the user clicks on a message or a server.
 
-\texttt{presenter.js} contains utilities to save and load a particular state, hotkeys to quickly interact with the system with functions that simulate interesting situations such as split votes.\\
+The \texttt{presenter.js} file contains utilities to save and load simulation scenarios (state).
+Further it provide hot keys to quickly interact with the system, offering the
+functions that help simulate interesting situations such as split votes.\\
 
-\texttt{script.js} now only contains intialization code and the \emph{system clock}.
+Thanks to our refactoring the \texttt{script.js} now only contains the
+initialization code and the \emph{system clock} loop.
 
 
 \subsection{Interface}
-The log table has been rewritten in plain \texttt{html} instead of SVG to allow support for an infinite log with autoscrolling and a high number of servers.
+The log table has been rewritten in plain \texttt{html} instead of SVG
+to allow support for an infinite log with auto scrolling and a high number of servers.
 To avoid confusion the ``leader only'' fields in the modal menu of the
 follower servers have been hidden and a legend was added to explain the
 otherwise cryptic symbols in the log table. Moreover, each log entry
@@ -57,14 +68,8 @@ is categorized depending on its type (\texttt{NOOP}, configuration change entry,
 
 We added controls for the features we introduced in the protocol: a slider to set the \emph{network noise}, a \emph{server add} button, a button to the server context menu for removal and finally a new table to visualize the cluster configuration changes queue.
 
-\begin{figure*}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.9\linewidth]{our.png}
     \caption{Extended}\label{fig:final}
-\end{figure*}
-
-\subsection{Future work}
-The \emph{leadership transfer extension} described in Section 3.10 of the thesis
-was not implemented in the original Raft Scope or our work because it was not evaluated by the authors.
-
-As said in the introduction we plan to submit a pull request to the original Raft Scope and discuss our changes (while fixing any bugs we might have introduced) with the original author.
+\end{figure}

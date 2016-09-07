@@ -1,8 +1,10 @@
-%\documentclass[11pt,a4paper,draft]{proc}
 \documentclass[11pt,a4paper]{proc}
 
 \usepackage{graphicx}
-\usepackage{flushend}
+%\usepackage{flushend}
+\usepackage{url}
+\usepackage[toc,page]{appendix}
+
 
 \graphicspath{{./images/}}
 
@@ -16,7 +18,7 @@
   Nardelli, Andrea\\
   \texttt{\#171723}
 }
-\title{Visualizing Raft}
+\title{Visualizing Raft\\\small{\url{https://github.com/Illedran/raftscope}}}
 
 \begin{document}
 \maketitle
@@ -27,7 +29,7 @@
 \section{Introduction}
 \input{section/introduction.tex}
 
-\section{Raft Scope - State of the art}
+\section{Raft Scope}
 \input{section/raftscope.tex}
 
 \section{Extending Raft Scope}
@@ -38,4 +40,20 @@
 
 \bibliographystyle{unsrt}
 \bibliography{report}
+
+\newpage{}
+\begin{figure*}[h]
+    \centering
+    \caption{\huge{Original Raft Scope interface}}
+    \includegraphics[width=0.65\linewidth]{org.png}
+\end{figure*}
+
+\vfill{}
+
+\begin{figure*}[h]
+    \centering
+    \caption{\huge{Extended Raft Scope interface}}
+    \includegraphics[width=0.9\linewidth]{our.png}
+\end{figure*}
+
 \end{document}
