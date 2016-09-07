@@ -35,22 +35,27 @@ other servers, which have not yet received the entry, might still interact with 
 We decided to remove it when every other server has removed it from its \texttt{peers} list.
 
 \subsection{Code reorganization}
+We added the following files:
+\begin{itemize}
+\item \texttt{render.js}
+\item \texttt{presenter.js}
+\end{itemize}
+
+\texttt{render.js} handles all the graphic, in particular SVG generation, servers realignment, sliders and generating the new log table. It also contains the code that generates modal and context menu when clicking messages or servers.
+
+\texttt{presenter.js} contains utilities to save and load a particular state, hotkeys to quickly interact with the system with functions that simulate interesting situations such as split votes.\\
+
+\texttt{script.js} now only contains intialization code and the \emph{system clock}.
+
 
 \subsection{Interface}
-For the timing issue discussed in Section~\ref{sec:internals} we limited the
-simulation speed into a reasonable range.
-The log table has been rewritten to support an infinite log and
-now features also the auto scroll.
-To avoid confusion the ``leader only'' fields in the state modal of the
+The log table has been rewritten in plain \texttt{html} instead of SVG to allow support for an infinite log with autoscrolling and a high number of servers.
+To avoid confusion the ``leader only'' fields in the modal menu of the
 follower servers have been hidden and a legend was added to explain the
-otherwise cryptic symbols in the log table. Moreover, now, each log entry
-is represented differently on the basis of its nature (\texttt{NOOP}, Config
-change message, user value).
-We obviously added controls for the feature we introduced in the Protocoll,
-we thus added a slider to set the \emph{network noise}, a \emph{server add}
-button and a voice to the context menu for server removal and finally
-a new table to visualize the cluster configuration changes queue.
-Besides that few minor bug were fixes.
+otherwise cryptic symbols in the log table. Moreover, each log entry
+is categorized depending on its type (\texttt{NOOP}, configuration change entry, user request).
+
+We added controls for the features we introduced in the protocol: a slider to set the \emph{network noise}, a \emph{server add} button, a button to the server context menu for removal and finally a new table to visualize the cluster configuration changes queue.
 
 \begin{figure*}[h]
     \centering
