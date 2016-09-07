@@ -2,28 +2,29 @@ Raft is a consensus algorithm for managing a replicated log
 proposed by Diego Ongaro and John Ousterhout~\cite{ongaro2014search}.
 It is equivalent to the state of the art (multi-)Paxos~\cite{lamport1998part} in fault-tolerance and performance and
 aims at replacing it thanks to its understandability.
-Consensus algorithms tend to be complex due to the problem they try to solve,
+Consensus algorithms tend to be complex due to the huge problem they try to solve,
 and leaving space for interpretation, like Lamport
 did when proposing Paxos via a tale~\cite{lamport1998part}, does not help.
 The combination of Paxos' complexity and the way it was presented required
 Lamport to release an alternative description~\cite{lamport2001paxos}.
 Even if the author claims that ``The Paxos algorithm, when presented in plain
-English, is very simple.'' it seems that the level of abstraction
+English, is very simple.'', the level of abstraction
 with which Paxos was designed and its complex architecture do not map
 to real world applications and complicate its implementations, which are sometimes
 required to relax the model leading to unproved protocols~\cite{chandra2007paxos}.
 The same argument holds for the students and researches.\\
-Ongaro, thus, identified in the \emph{understandability} its ``most important goal''~\cite{ongaro2014consensus}.
+The creator thus identified in \emph{understandability} its ``most important goal''~\cite{ongaro2014consensus}
+while describing Raft, breaking it into smaller independant subproblems and cleanly addressing all pieces needed
+for a pratical application.
 
-What is the simplest way to present an try to understand and interaction based
+What is the simplest way to present and try to understand an interaction based
 protocol?\emph{Visualizing it!}
 
-Ongaro uses and provides a Raft simulator, Raft Scope~\cite{raftscope}, to introduce the protocol.
-Such tool is very useful for easy scenarios simulation and slides creation,
-unfortunately it does not implement all the features of the protocol and lacks
-some graphics functionalities which can be key in the presentation of
-many corner cases.
+Ongaro created and uses a Raft simulator, Raft Scope~\cite{raftscope}, to introduce the protocol.
+This tool is very useful to simulate easy scenarios and to create slides for presentations,
+however it does not currently implement all the features of the protocol and lacks
+some graphics cues which can be key in the presentation of many corner cases.
 
-In our project we aim at complete the protocol implementation, integrate the new
-functionalities with the existing one and improve the graphics where needed to
-enhance transparency and thus enable even more understanding.
+In our project we aim to complete the protocol implementation, integrate new
+functionalities with the existing ones and improve the user interface where needed to
+enhance transparency and thus make Raft even more understandable.
