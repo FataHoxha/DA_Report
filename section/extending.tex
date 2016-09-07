@@ -1,43 +1,40 @@
-We extended the current official Raft visualizer
-to emulate the full protocol and we integrated the latest published variation
-and fixes (Figure~\ref{fig:final}).
+\subsection{Simulation model}
+Fixing the problem in section 2.1 is not straight forward: swapping the two checks would
+break other scenarios (\texttt{e.g.} M1 is due just after the \texttt{ElectionTimeout}).
+The only definitive fix would have been rewriting the entire simulation system.
+Given the use case and applications of Raft Scope we decided to limit the maximum speed to prevent such problems.
 
-\subsection{Protocol}
-Now the simulator support \emph{Cluster membership changes}.
-    Addition and removal of a follower and removal of the leader
-    from the cluster via the single-server mutation
-    algorithm proposed by Ongaro in his Ph.D. thesis~\cite{ongaro2014consensus}.
+Network noise was integrated into the simulation and the state object, dropping each message with a probability
+set by the user.
 
-The fix for single-server algorithm was also backported;
-    as discussed at the \#raft-dev mailing list~\cite{bug} with this
-    algorithm could happen double leadership and committed history rewrite.
-    The fix we implemented is to write in the log a \texttt{NOOP} message
-    every time a server becomes a \emph{leader}.
+\subsection{Interaction}
+\emph{Cluster membership changes} are an important part of a consensus protocol. Raft initially handled this with a procedure
+called \emph{joint consensus} but Ongaro expanded on this matter in his Ph.D. thesis~\cite{ongaro2014consensus}(Chapter 4) with a new
+simpler algorithm that only allows single server changes at a time (both removal and addition), however any arbitrary
+change that could be expressed with joint consensus can be also managed with a series of single server changes that is easier to visualize.
+Each configuration in the series must be committed before the next one can take place.
+With the intention to clarify this series of changes, we added a \emph{cluster configuration changes queue}.
+This queue keeps track of all the cluster reconfigurations submitted by the user while they are being processed.
+The original dissertation is not clear on what action to take regarding pending configurations when leadership is lost.
 
-We also implemented the safety check for Disruptive servers:
-    Follower servers ignore \texttt{voteRequest} if it has heard from the
-    current limit within \texttt{MIN\_ELECTION\_TIMEOUT}; prescribed in the
-    section 4.2.3 of the Ongaro's thesis.
+A bug in the single server membership change algorithm was later found and discussed in the raft-dev mailing list~\cite{bug} which
+could rewrite committed history. The bug occurred whenever leadership was lost and two pending configurations were happening
+at the same time, submitted by different leaders. As described there, we implemented the fix by having leaders append a \texttt{NOOP} to their log.
 
-\subsection{Simulation}
-We added the concept of \texttt{network noise}; the system simulate the noise
-on the network dropping each message with a probability set by the user.
+We implemented a safety check for disruptive(removed) servers as described in section 4.2.3 of the author's thesis.
+Servers, when removed, could disrupt cluster functionality by starting new elections whenever a pending change for their removal
+is being processed. The fix makes servers ignore VoteRequest RPCs if they have received an heartbeat within
+\texttt{MIN\_ELECTION\_TIMEOUT} from an active leader.
 
-A \emph{cluster configuration changes queue} was added to allow the user to submit
-multiple configuration change requests. In the thesis it is not clear whether it is the
-leader to have to buffer for the changes request or the client trying up to succeed.
-We decided that it is duty of the leader; this means that when the leader changes
-pending operations are lost.
+\subsection{Integrating the new features}
+In order to allow transparent playback we modified the rendering phase in the main loop to take in account the possibility for
+membership changes and automatic message drop due to network noise.
+It was particularly challenging to determine when it is safe to remove a server
+from the simulation: it is not correct to remove it when its corresponding configuration change is committed because
+other servers, which have not yet received the entry, might still interact with it.
+We decided to remove it when every other server has removed it from its \texttt{peers} list.
 
-\subsection{Internals}
-To support the new protocol functionalities we had to modify the
-\texttt{checkpoint} snapshot format and the main loop.
-In order to allow transparently replay/rollback/playback we have also to
-modify the rendering phase to take in account the possibility that
-servers can join and leave, particularly challenging was to deterministically decide
-when it is safe to remove a server from the graphic and thus from the simulation.
-We decided to remove it when no one server has got it in the \texttt{peers} list.
-
+\subsection{Code reorganization}
 
 \subsection{Interface}
 For the timing issue discussed in Section~\ref{sec:internals} we limited the
@@ -61,10 +58,6 @@ Besides that few minor bug were fixes.
     \caption{Extended}\label{fig:final}
 \end{figure*}
 
-\subsection{Non implemented functionalities}
-The \emph{leadership transfer extension} described in Section~3.10 of the thesis
-was not implemented since it was never implemented or evaluated by the authors.
-
-We did not implemented \emph{joint consensus} since the one implemented is as
-powerful as it is, but it is also simpler, more understandable and it is
-the one the author indicated as preferred.
+\subsection{Future work}
+The \emph{leadership transfer extension} described in Section 3.10 of the thesis
+was not implemented in the original Raft Scope or our work because it was not evaluated by the authors.
